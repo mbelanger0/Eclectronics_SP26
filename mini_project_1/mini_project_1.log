@@ -1,0 +1,15 @@
+LTspice 24.0.12 for Windows
+Circuit: * C:\Users\mbelanger\OneDrive - Olin College of Engineering\Documents\Fourth Year\Second Semester\Ecelectronics\mini_project_1.asc
+Start Time: Tue Jan 27 21:52:12 2026
+solver = Normal
+Maximum thread count: 20
+tnom = 27
+temp = 27
+method = modified trap
+WARNING: Node -5V is floating.
+
+WARNING: Less than two connections to node 5v.  This node is used by v1.
+WARNING: Less than two connections to node -5v.  This node is used by v1.
+Direct Newton iteration for .op point succeeded.
+Total elapsed time: 0.127 seconds.
+
