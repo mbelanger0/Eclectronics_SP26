@@ -1,0 +1,69 @@
+%% CHANGE THIS ACCORDINGLY:
+\newcommand{\authorFullName}{Mark Belanger}
+\newcommand{\authorUCO}{Franklin W. Olin College of Engineering}
+\newcommand{\authorFieldOfStudy}{}
+%% AND NAME THE PROJECT UCO-surname-firstname-STAT-CS-YEAR (with or without dashes)
+
+\newcommand{\courseName}{ENGR3430: Eclectronics}
+
+\documentclass[12pt, oneside]{report}
+\usepackage[margin=0.85in]{geometry}
+\linespread{1}
+\usepackage{xcolor}
+\usepackage[colorlinks=false, linkbordercolor=white, citebordercolor=white, 
+    filebordercolor=white, urlbordercolor=white]{hyperref}
+    
+\usepackage{graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage{svg}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead{}
+\fancyhead[L]{\courseName\ }
+\fancyhead[R]{\authorFullName}
+\fancyfoot{}
+\fancyfoot[C]{\thepage}
+
+\usepackage{titlesec}
+\titlespacing{\chapter}{0pt}{*4}{*2.5}
+
+\titleformat{\chapter}{\normalfont\huge\bf}{\thechapter}{20pt}{\huge\bf}
+
+
+% definition of an environment
+\usepackage{listings}
+\definecolor{dgray}{gray}{0.35} % colour of comments
+\definecolor{lgray}{gray}{0.95} % background colour 
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+
+\lstset{ % setting appearance of code
+language=c++, % setting language
+basicstyle=\ttfamily\small, % font and size
+backgroundcolor=\color{lgray}, % background colour
+keywordstyle=\color{magenta},
+stringstyle=\color{codepurple},
+commentstyle=\ttfamily\small\itshape\color{codegreen}, % colour of comments
+showstringspaces=false, % forbidding the highlighting of spaces
+numbers=left, % numbering on the left
+numberstyle=\ttfamily\small, % font and size of numbering
+stepnumber=1, % numbering with step 1
+firstnumber=last, % cumulative numbering of rows in consecutive uses of lstlisting environment
+breaklines=T} % automatic line breaks of code at the end of a line
+
+\begin{document}
+\input{title}
+\addtocontents{toc}{~\hfill\textbf{Page}\par}
+\setlength\parindent{0pt}
+\input{main} % inputs file with main text
+\end{document}

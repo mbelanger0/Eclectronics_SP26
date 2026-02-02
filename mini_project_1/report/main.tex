@@ -1,0 +1,135 @@
+\section*{Project Goals}
+The goal of this project is to create a USB powered circuit to flash an LED with a period of 1s $\pm$ 10\%.
+This translates to a frequency of 1Hz $\pm$ 10\%
+The components given makes this doable by creating a hysteretic oscillator using an op-amp.
+
+\section*{Design Decisions}
+
+\subsection*{Oscillator Component Value Selection}
+
+Designing this oscillation circuit required picking values for $V_{ref}$ the various feedback resistors and capacitors.\\
+
+Having $V_{ref}$ set at $\frac{1}{2}V_{dd}$ allows for the upper and lower oscillator
+trigger thresholds to be centered in the $V_{dd}$ range when the voltage divider
+resisters, $R`$' connected to the inverting op-amp input are selected to be equal.
+In this arrangement, $RC=\tau$, connected to the non-inverting op-amp input, are most important
+to controlling the timing of the circuit. I selected to use the $0.1\mu F$ capacitor for $C$ because
+the the op-amp MCP6022 IC uses a $0.1\mu F$ capacitor for its power bypass capacitance meaning
+the design already needs a capacitor of that size which minimized the variety of capacitor values needed.
+Additionally, the $0.1\mu F$ capacitor has a 5\% tolerance which is less than the $1\mu F$ capacitor which
+has a 10\% tolerance. This makes for less variation in the output frequency due tolerances.
+With $C$ fixed, I needed to solve for $R$ and did so using the equation below in which
+$V_{up}$ is the threshold in which the op-amp output goes high, $V_{dn}$ is the
+threshold in which the op-amp output goes low, $T_l$ is the period in which the oscillator outputs
+low.
+
+
+\[
+V_{up} = V_{dn}e^{\frac{-T_l}{\tau}}
+\]\\
+
+With $V_{ref} = \frac{1}{2}V_{dd}$, $V_{up} = \frac{1}{4}V_{dd}$ and $V_{dn} =  \frac{3}{4}V_{dd}$. 
+Solving for $\tau$ we get
+\[
+\tau = \frac{-T_l}{log \left( \frac{V_{up}}{V_{dn}} \right)}
+\]
+
+Simplifying further:
+\[
+\tau = \frac{-T_l}{log \left( \frac{1}{3} \right)}
+\]\\
+
+Breaking $\tau$ into $RC$ and dividing out $C$ solves for $R$:
+
+\[
+R = \frac{-T_l}{log\left( \frac{1}{3} \right)C}
+\]\\
+
+
+I want the design to have a 50\% duty cycle so the low time should be equal
+to the high time. With the design needing to have a 1Hz frequency, the high
+time and low time each should be 0.5s. As such $T_l = 0.5s$ and knowing that
+$C$ is selected to be $0.1\mu F$, the nominal value for $R = 4.55M \Omega$. A 
+$4.55M\Omega$ resister is not available in the BOM but it can be closely created
+using a series connection of two $2M\Omega$, one $499k\Omega$, and one $49.9k\Omega$ resistors.
+This creates an equivalent resistance of $4.5489M\Omega$ which is less than 0.03\% different 
+than the nominal $4.55M\Omega$.\\
+
+The circuit runs on a single ended 3.3V supply derived from the $V_{bus}$ of a USB using a linear regulator.
+As such $V_{dd}$ for this circuit is 3.3V and since I want to have a $V_{ref}$ equal to $\frac{1}{2}V_{dd}$,
+I need to divide the $V_{dd}$ supply in two. I did this using a voltage divider and two $1k\Omega$ resistors.
+I did not directly attach the $V_{out}$ of the voltage divider to the feedback on the op-amp though. 
+Doing this would have put the voltage divider as part of the feedback causing the 1.65V reference
+to vary. To mitigate this I used the second op-amp on the MCP6022 to create a buffer. I then connected
+the output of that op-amp for $V_{ref}$. 
+
+\subsection*{IC Application}
+The datasheet for the MCP1702 linear regular suggests having $1\mu F$ bypass capacitors on the 
+input and output so these were included in the design. Additionally the MCP6022 op-amp datasheet suggests
+having a $0.1\mu F$ bypass capacitor within 2mm and $1\mu F$ bulk capacitor within 100mm.
+As such $0.1\mu F$ cap is connected less than 2mm away from the power pin and the $1\mu F$ bypasss
+capacitor on the output of the linear regular is within 100mm and acts as bulk capacitance
+for the op-amp
+
+\subsection*{Worse Case Analysis}
+
+I used LTSpice to do a worst-case analysis on the circuit. The simulation includes tolerance for
+each component and simulates the circuit against the tolerances of one another.\\
+
+The LTSpice schematic can be seen below:
+
+ \begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/worst_case_schematic.png}
+  \caption{}
+  \label{fig:worst_case_sim_schematic}
+\end{figure}
+
+
+\newpage
+I exported the raw data for processing using Python. I created a script that uses the rising edges
+to calculate frequency of the signals, determines the highest and lowest frequencies of all the
+runs/combination, and plots all the runs on a histogram to show a distribution. My simulation uses 11 components so there
+were 2028 combination. Out of these, the highest frequency was 1.091Hz and the lowest was 0.935Hz
+both of which are within the 1Hz $\pm$ 1\% requirement.\\
+
+The distribution of frequencies can be seen below:
+
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=0.8\textwidth]{assets/worst_case_frequency_distribution.png}
+  \caption{}
+  \label{fig:worst_case_frequency_distribution}
+\end{figure}
+
+\newpage
+
+
+\subsubsection*{Model Abstractions}
+One model abstraction in this simulation is not including the linear regulator. We were told that
+we do not need to model the tolerance of the linear regulator so I chose to generate the 3.3V power
+using a standard LTSpice voltage source. Since I didn't include the linear regulator directly, it also 
+means that the bypass capacitor on the input of the linear regulator is not included.\\
+
+The simulation also does not include tolerance for the current limiting resistor for the LED as suggested.
+
+\subsection*{Layout Considerations}
+I followed the convention of having 8mil trace widths for signals and 20mil power trace widths were possible.
+I was able to follow this except for trace connecting to the positive rail on the op-amp. I found that 20mils was
+too wide and I needed to reduce it to 17mil. Although reduced in size, the current flow through that trace is still
+well below the max current flow for a 17mil trace so this should not cause any problems. The smaller trace width
+likely has a reduction in thermal capacity and bulk capacitance but not enough to cause concern for a simple circuit
+like this. I also used the suggested 24mil via with 12mil drill hole diameter.\\
+
+
+I tried to focus on minimizing trace lengths and keeping routed tracing far from one another to minimize crosstalk.
+The frequencies in this circuit are low enough that such considerations likely are overkill but I still
+wanted to try to follow best practices. I tried to keep power traces short and signals traces also short and away
+from unlike signals. I also tried to place vias in position to minimize loop area.
+My layout likely could have been made more compact but it would have been at the trade
+off of routing. Additionally, I wanted to consider manufacturing and assembly. Having components/traces very close to
+each other can make it more difficult for fabs to fabricate for a low cost and having sufficient space between can make its
+more viable to fabricate these on a smaller desktop style PCB mills. Additionally having done hand soldering with 
+SMD I've learned that having little space between components increases the likelihood of solder on one
+pad bridging to another so the extra spacing should be helpful. I also wanted to keep sufficient space for component labels.
