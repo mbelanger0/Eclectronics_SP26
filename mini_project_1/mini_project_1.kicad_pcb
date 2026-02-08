@@ -3279,8 +3279,8 @@
 		(layer "Edge.Cuts")
 		(uuid "ee9f88bf-322a-4d1f-b43a-92108de032af")
 	)
-	(gr_text "Mark Belanger\nHysteretic Oscillator\nMini Project 1\nEcelectroncis SP26\nOlin College of Engineering"
-		(at 158.7 102.3 0)
+	(gr_text "Mark Belanger\nHysteretic Oscillator\nMini Project 1\nEcelectroncis SP26\nOlin College of Engineering\n09 February 2026"
+		(at 158.8 103.8 0)
 		(layer "B.SilkS")
 		(uuid "bdcb9582-17f8-49d3-9519-84b329b7b504")
 		(effects
