@@ -10729,7 +10729,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4105-xx-A_16P_TopMnt_Horizontal"
+		(property "Footprint" "Eclectronics:USB4105-GF-A"
 			(at 34.29 34.29 0)
 			(effects
 				(font
