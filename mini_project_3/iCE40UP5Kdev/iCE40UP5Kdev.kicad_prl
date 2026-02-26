@@ -36,6 +36,7 @@
       "grid",
       "footprints_front",
       "footprints_back",
+      "footprint_values",
       "tracks",
       "drc_errors",
       "drawing_sheet",
@@ -48,10 +49,11 @@
       "conflict_shadows",
       "shapes"
     ],
-    "visible_layers": "ffffffff_ffffffff_ffffffff_ffffffff",
+    "visible_layers": "00000000_00000000_0fffffff_ffffffff",
     "zone_display_mode": 0
   },
   "git": {
+    "repo_password": "",
     "repo_type": "",
     "repo_username": "",
     "ssh_key": ""
@@ -86,16 +88,16 @@
       9
     ],
     "col_widths": [
-      149,
-      137,
-      90,
-      63,
-      90,
-      90,
-      90,
-      66,
-      90,
-      90
+      119,
+      110,
+      72,
+      50,
+      72,
+      72,
+      72,
+      53,
+      72,
+      72
     ],
     "custom_group_rules": [],
     "expanded_rows": [],
