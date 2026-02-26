@@ -4491,15 +4491,6 @@
 		)
 		(uuid "2bc02934-9ad7-479d-aeaa-ce068793b92c")
 	)
-	(bus_entry
-		(at 81.28 160.02)
-		(size 2.54 2.54)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ff2cc54e-0883-471d-ae38-484e19caef68")
-	)
 	(wire
 		(pts
 			(xy 53.34 26.67) (xy 53.34 24.13)
